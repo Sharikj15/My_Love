@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversario</title>
+    <link rel="stylesheet" href="css/Styles.css">
+</head>
+<body>
+
+    <!-- PANTALLA DE BLOQUEO -->
+    <div id="pantalla-bloqueo" class="tarjeta-candado">
+        <div class="icono-candado">🔒</div>
+        <h2>FELIZ ANIVERSARIO</h2>
+        <p class="subtitulo">Ingresa nuestra fecha</p>
+        
+        <div class="puntos-pin">
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+        </div>
+
+        <div class="teclado">
+            <button onclick="presionarTecla('1')">1</button>
+            <button onclick="presionarTecla('2')">2</button>
+            <button onclick="presionarTecla('3')">3</button>
+            <button onclick="presionarTecla('4')">4</button>
+            <button onclick="presionarTecla('5')">5</button>
+            <button onclick="presionarTecla('6')">6</button>
+            <button onclick="presionarTecla('7')">7</button>
+            <button onclick="presionarTecla('8')">8</button>
+            <button onclick="presionarTecla('9')">9</button>
+            <button onclick="borrarTodo()">C</button>
+            <button onclick="presionarTecla('0')">0</button>
+            <button onclick="borrarUno()">⌫</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL -->
+    <div id="pantalla-principal" class="tarjeta-principal oculto">
+        
+        <!-- SECCIÓN CONTADOR -->
+        <div id="seccion-inicio">
+            <h2>NUESTRO TIEMPO JUNTOS</h2>
+            <div id="contador"></div>
+            <div class="botones">
+                <button onclick="mostrarSeccion('recuerdos')">VER RECUERDOS</button>
+                <button onclick="mostrarSeccion('carta'); escribirCarta();">LEER CARTA</button>
+            </div>
+        </div>
+
+        <!-- SECCIÓN RECUERDOS (8 FOTOS EN 3D) -->
+        <div id="recuerdos" class="seccion oculto">
+            <h2>RECUERDOS :</h2>
+            <div class="carrusel-contenedor">
+                <div class="carrusel-3d" id="carrusel">
+                    <div class="tarjeta-foto"><img src="img/Foto1.jpeg" alt="Recuerdo 1"></div>
+                    <div class="tarjeta-foto"><img src="img/foto2.jpeg" alt="Recuerdo 2"></div>
+                    <div class="tarjeta-foto"><img src="img/foto3.jpeg" alt="Recuerdo 3"></div>
+                    <div class="tarjeta-foto"><img src="img/foto4.jpeg" alt="Recuerdo 4"></div>
+                    <div class="tarjeta-foto"><img src="img/foto5.jpeg" alt="Recuerdo 5"></div>
+                    <div class="tarjeta-foto"><img src="img/foto6.jpeg" alt="Recuerdo 6"></div>
+                    <div class="tarjeta-foto"><img src="img/foto7.jpeg" alt="Recuerdo 7"></div>
+                    <div class="tarjeta-foto"><img src="img/foto8.jpeg" alt="Recuerdo 8"></div>
+                </div>
+            </div>
+            <div class="controles-carrusel">
+                <button onclick="moverCarrusel(-1)">❮</button>
+                <button onclick="moverCarrusel(1)">❯</button>
+            </div>
+            <button onclick="ocultarSecciones()" class="btn-volver">VOLVER</button>
+        </div>
+
+        <!-- SECCIÓN CARTA -->
+        <div id="carta" class="seccion oculto">
+            <div class="contenido-carta">
+                <p id="texto-carta"></p>
+            </div>
+            <button onclick="ocultarSecciones()" class="btn-volver">VOLVER</button>
+        </div>
+
+    </div>
+
+    <script src="js/Script.js"></script>
+</body>
+</html>
