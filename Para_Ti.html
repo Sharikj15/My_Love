@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <style>
+        /* === ESTILOS CSS === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #030108;
+            background-image: radial-gradient(circle at center, #1f0a2d 0%, #030108 100%);
+            color: #e2b76e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px 10px;
+            overflow-y: auto;
+        }
+
+        .tarjeta-candado, .tarjeta-principal {
+            background: rgba(15, 8, 25, 0.95);
+            border: 1px solid #e2b76e;
+            box-shadow: 0 0 25px rgba(226, 183, 110, 0.25);
+            border-radius: 20px;
+            padding: 25px 20px;
+            width: 360px;
+            max-width: 95vw;
+            max-height: 90vh;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tarjeta-candado.error {
+            animation: vibrar 0.4s ease-in-out;
+            border-color: #ff4d4d;
+        }
+
+        @keyframes vibrar {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .icono-candado { font-size: 22px; margin-bottom: 8px; }
+
+        h2 {
+            font-size: 1.05rem;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .subtitulo { font-size: 0.75rem; color: #a89575; margin-bottom: 20px; }
+
+        .puntos-pin {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .punto {
+            width: 12px;
+            height: 12px;
+            border: 1px solid #e2b76e;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .punto.activo {
+            background-color: #e2b76e;
+            box-shadow: 0 0 8px #e2b76e;
+        }
+
+        .teclado {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            justify-items: center;
+        }
+
+        .teclado button {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 1px solid rgba(226, 183, 110, 0.4);
+            background: rgba(255, 255, 255, 0.02);
+            color: #e2b76e;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .oculto { display: none !important; }
+
+        .botones {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .botones button, .btn-volver {
+            background: transparent;
+            border: 1px solid #e2b76e;
+            color: #e2b76e;
+            padding: 8px 14px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .botones button:hover, .btn-volver:hover {
+            background: #e2b76e;
+            color: #030108;
+        }
+
+        #contador {
+            font-size: 0.95rem;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .carrusel-contenedor {
+            perspective: 800px;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .carrusel-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .tarjeta-foto {
+            position: absolute;
+            width: 130px;
+            height: 180px;
+            left: 50%;
+            top: 50%;
+            margin-left: -65px;
+            margin-top: -90px;
+            border-radius: 12px;
+            border: 2px solid #e2b76e;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            transition: all 0.4s ease-in-out;
+            background: #000;
+        }
+
+        .tarjeta-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .controles-carrusel {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .controles-carrusel button {
+            background: transparent;
+            border: 1px solid #e2b76e;
+            color: #e2b76e;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .contenido-carta {
+            text-align: left;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .contenido-carta::-webkit-scrollbar {
+            width: 5px;
+        }
+        .contenido-carta::-webkit-scrollbar-track {
+            background: rgba(226, 183, 110, 0.1);
+            border-radius: 10px;
+        }
+        .contenido-carta::-webkit-scrollbar-thumb {
+            background: #e2b76e;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo" class="tarjeta-candado">
+        <div class="icono-candado">🔒</div>
+        <h2>FELIZ ANIVERSARIO</h2>
+        <p class="subtitulo">Ingresa nuestra fecha</p>
+        
+        <div class="puntos-pin">
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+            <span class="punto"></span>
+        </div>
+
+        <div class="teclado">
+            <button onclick="presionarTecla('1')">1</button>
+            <button onclick="presionarTecla('2')">2</button>
+            <button onclick="presionarTecla('3')">3</button>
+            <button onclick="presionarTecla('4')">4</button>
+            <button onclick="presionarTecla('5')">5</button>
+            <button onclick="presionarTecla('6')">6</button>
+            <button onclick="presionarTecla('7')">7</button>
+            <button onclick="presionarTecla('8')">8</button>
+            <button onclick="presionarTecla('9')">9</button>
+            <button onclick="borrarTodo()">C</button>
+            <button onclick="presionarTecla('0')">0</button>
+            <button onclick="borrarUno()">⌫</button>
+        </div>
+    </div>
+
+    <div id="pantalla-principal" class="tarjeta-principal oculto">
+        
+        <div id="seccion-inicio">
+            <h2>NUESTRO TIEMPO JUNTOS</h2>
+            <div id="contador"></div>
+            <div class="botones">
+                <button onclick="mostrarSeccion('recuerdos')">VER RECUERDOS</button>
+                <button onclick="mostrarSeccion('carta'); escribirCarta();">LEER CARTA</button>
+            </div>
+        </div>
+
+        <div id="recuerdos" class="seccion oculto">
+            <h2>RECUERDOS :</h2>
+            <div class="carrusel-contenedor">
+                <div class="carrusel-3d" id="carrusel">
+                    <div class="tarjeta-foto"><img src="Fotos/foto1.jpg" alt="Recuerdo 1"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto2.jpg" alt="Recuerdo 2"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto3.jpg" alt="Recuerdo 3"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto4.jpg" alt="Recuerdo 4"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto5.jpg" alt="Recuerdo 5"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto6.jpg" alt="Recuerdo 6"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto7.jpg" alt="Recuerdo 7"></div>
+                    <div class="tarjeta-foto"><img src="Fotos/foto8.jpg" alt="Recuerdo 8"></div>
+                </div>
+            </div>
+            <div class="controles-carrusel">
+                <button onclick="moverCarrusel(-1)">❮</button>
+                <button onclick="moverCarrusel(1)">❯</button>
+            </div>
+            <button onclick="ocultarSecciones()" class="btn-volver">VOLVER</button>
+        </div>
+
+        <div id="carta" class="seccion oculto">
+            <div class="contenido-carta">
+                <p id="texto-carta"></p>
+            </div>
+            <button onclick="ocultarSecciones()" class="btn-volver">VOLVER</button>
+        </div>
+
+    </div>
+
+    <script>
+        // === CÓDIGO JAVASCRIPT ===
+        const CONTRASENA = "210925";
+        const FECHA_INICIO = new Date("2025-09-21T00:00:00");
+        const TEXTO_CARTA = "Te amo demasiado, pero para que me entiendas mejor: nunca te voy a fallar, así como Zoro nunca traicionó a Luffy; te guiaré en este mundo tan solo, así como Nami lleva a Luffy; te cocinaré cada plato favorito como Sanji; perderé mis miedos, así como Usopp los perdió; te cuidaré y seré tu médico para sanarte siempre como Chopper; serás mi razón de vivir, así como Robin sobrevivió y quiso vivir por estar a su lado; te construiré un barco para que persigamos nuestros sueños como Franky lo hizo; te cantaré y te animaré siempre como Brook; te protegeré y te ayudaré a salir de tu peor momento, así como Jinbe lo hizo con Luffy por la muerte de Ace; así como el Going Merry, daré mi último aliento para protegerte; y como todos los tripulantes, me montaré a tu barco a navegar todo este mar de desafíos solo para verte ser el rey y juntos cumplir nuestros sueños.\n\nAsí que, amor, así es mi forma de amarte. Cuando no me entiendas, entiende que yo estaría dispuesta a hacer eso, y te amaré tanto, así como Zoro a sus katanas, así como Nami a los tesoros, así como Sanji a las mujeres, así como Usopp ama a Kaya, como Chopper ama a la medicina, como Robin ama a los libros, como Franky ama al Sunny, como Brook ama a su ballena y su música, como Jinbe amaba a Barbablanca y su pueblo, y así como Luffy ama a su tripulación.";
+
+        let codigoIngresado = "";
+        let indiceFotoActual = 0;
+        let cartaEscribiendo = false;
+
+        function presionarTecla(numero) {
+            if (codigoIngresado.length < 6) {
+                codigoIngresado += numero;
+                actualizarPuntos();
+                if (codigoIngresado.length === 6) {
+                    setTimeout(verificarCodigo, 150);
+                }
+            }
+        }
+
+        function borrarUno() {
+            codigoIngresado = codigoIngresado.slice(0, -1);
+            actualizarPuntos();
+        }
+
+        function borrarTodo() {
+            codigoIngresado = "";
+            actualizarPuntos();
+        }
+
+        function actualizarPuntos() {
+            const puntos = document.querySelectorAll('.punto');
+            puntos.forEach((p, i) => {
+                if (i < codigoIngresado.length) {
+                    p.classList.add('activo');
+                } else {
+                    p.classList.remove('activo');
+                }
+            });
+        }
+
+        function verificarCodigo() {
+            if (codigoIngresado === CONTRASENA) {
+                document.getElementById('pantalla-bloqueo').classList.add('oculto');
+                document.getElementById('pantalla-principal').classList.remove('oculto');
+                iniciarContador();
+                actualizarCarrusel();
+            } else {
+                const tarjeta = document.getElementById('pantalla-bloqueo');
+                tarjeta.classList.add('error');
+                setTimeout(() => {
+                    tarjeta.classList.remove('error');
+                    borrarTodo();
+                }, 400);
+            }
+        }
+
+        function iniciarContador() {
+            function actualizar() {
+                const ahora = new Date();
+                let diff = ahora - FECHA_INICIO;
+                if (diff < 0) diff = 0;
+
+                const segundos = Math.floor((diff / 1000) % 60);
+                const minutos = Math.floor((diff / (1000 * 60)) % 60);
+                const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const diasTotales = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                const anos = Math.floor(diasTotales / 365);
+                const meses = Math.floor((diasTotales % 365) / 30);
+                const dias = Math.floor((diasTotales % 365) % 30);
+
+                document.getElementById('contador').innerHTML = 
+                    `<b>${anos}</b> AÑOS | <b>${meses}</b> MESES | <b>${dias}</b> DÍAS<br>` +
+                    `<b>${horas}</b> HORAS | <b>${minutos}</b> MIN | <b>${segundos}</b> SEG`;
+            }
+            actualizar();
+            setInterval(actualizar, 1000);
+        }
+
+        function mostrarSeccion(id) {
+            document.getElementById('seccion-inicio').classList.add('oculto');
+            document.getElementById('recuerdos').classList.add('oculto');
+            document.getElementById('carta').classList.add('oculto');
+            document.getElementById(id).classList.remove('oculto');
+        }
+
+        function ocultarSecciones() {
+            document.getElementById('recuerdos').classList.add('oculto');
+            document.getElementById('carta').classList.add('oculto');
+            document.getElementById('seccion-inicio').classList.remove('oculto');
+        }
+
+        function moverCarrusel(direccion) {
+            const fotos = document.querySelectorAll('.tarjeta-foto');
+            indiceFotoActual = (indiceFotoActual + direccion + fotos.length) % fotos.length;
+            actualizarCarrusel();
+        }
+
+        function actualizarCarrusel() {
+            const fotos = document.querySelectorAll('.tarjeta-foto');
+            fotos.forEach((foto, i) => {
+                const offset = i - indiceFotoActual;
+                foto.style.transform = `translateX(${offset * 40}px) translateZ(${-Math.abs(offset) * 80}px) rotateY(${offset * -15}deg)`;
+                foto.style.opacity = Math.abs(offset) > 2 ? '0' : '1';
+                foto.style.zIndex = 10 - Math.abs(offset);
+            });
+        }
+
+        function escribirCarta() {
+            if (cartaEscribiendo) return;
+            cartaEscribiendo = true;
+            const el = document.getElementById('texto-carta');
+            el.innerHTML = "";
+            let i = 0;
+
+            function tipear() {
+                if (i < TEXTO_CARTA.length) {
+                    if (TEXTO_CARTA.charAt(i) === '\n') {
+                        el.innerHTML += '<br>';
+                    } else {
+                        el.innerHTML += TEXTO_CARTA.charAt(i);
+                    }
+                    i++;
+                    setTimeout(tipear, 25);
+                }
+            }
+            tipear();
+        }
+    </script>
+</body>
+</html>
